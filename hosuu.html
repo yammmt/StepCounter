@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>歩数を測りたい</title>
+  <meta name="viewport" content="width=320, user-scalable=no">
+  <style type = "text/css">
+    body {
+      margin: 0px 0px 0px 0px;
+      padding: 0px 0px 0px 0px;
+      color: #ffffff;
+      background: #000020;
+    }
+  </style>
+  <script language="JavaScript">
+    var X = 0;
+    var Y = 0;
+    var Z = 0;
+
+    var MaxG = -10000;
+    var MinG = 10000;
+
+    var LegBound = 10;
+    var Count = 0;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      window.addEventListener("devicemotion", deviceMotion);
+    });
+
+    function deviceMotion(e) {
+      X = e.accelerationIncludingGravity.x;
+      Y = e.accelerationIncludingGravity.y;
+      Z = e.accelerationIncludingGravity.z;
+
+      document.getElementById("x").innerHTML = "x : " + X;
+      document.getElementById("y").innerHTML = "y : " + Y;
+      document.getElementById("z").innerHTML = "z : " + Z;
+
+      countStep();
+    }
+
+    function countStep() {        
+      if(calcDist(X, Y, Z) > MaxG) {
+        MaxG = calcDist(X, Y, Z);
+      }
+      else if(calcDist(X, Y, Z) < MinG) {
+        MinG = calcDist(X, Y, Z);
+      }
+
+      if(MaxG-MinG > LegBound && MaxG != -10000 && MinG != 10000) {
+        Count++;
+        MaxG = -10000;
+        MinG = 10000;
+      }
+
+      document.getElementById("cnt").innerHTML = "Steps : " + Count;
+    }
+
+    function calcDist(x, y, z) {
+      return Math.sqrt(x*x+y*y+z*z);
+    }
+  </script>
+</head>
+
+<body>
+  こんなんやっつけやで<br><br>
+  <div id="x">x</div>
+  <div id="y">y</div>
+  <div id="z">z</div>
+  <br>
+  <div id="cnt"></div>
+</body>
+
+</html> 
